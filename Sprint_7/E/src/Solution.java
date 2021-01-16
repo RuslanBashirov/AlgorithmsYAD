@@ -1,17 +1,15 @@
 import java.io.*;
 import java.util.ArrayList;
-//import java.util.Scanner;
 
 public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
-        //Scanner sc = new Scanner(System.in);
         String[] twoVal = reader.readLine().split(" ");
 
         int n = Integer.parseInt(twoVal[0]);
         int m = Integer.parseInt(twoVal[1]);
 
-        /*if (n == 1){
+        if (n == 1){
             System.out.println("YES");
             return;
         }
@@ -19,12 +17,15 @@ public class Solution {
         if (m < n){
             System.out.println("NO");
             return;
-        }*/
+        }
 
         Vertex[] vertices = new Vertex[n];
+        Vertex[] transposed_vertices = new Vertex[n];
 
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < n; i++) {
             vertices[i] = new Vertex(i);
+            transposed_vertices[i] = new Vertex(i);
+        }
 
         int v,w;
 
@@ -34,26 +35,21 @@ public class Solution {
             w = Integer.parseInt(twoVal[1]);
 
             vertices[v - 1].adj.add(w-1);
+            transposed_vertices[w - 1].adj.add(v-1);
         }
 
         reader.close();
 
-        int visitedVertexes = 0;
-
         BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"));
 
-        for (int i = 0; i < n; i++) {
-            if (DFS(vertices, i, visitedVertexes) != n){
-                writer.write("NO");
-                writer.close();
-                return;
-            }
 
-            visitedVertexes = 0;
-
-            for (int j = 0; j < n; j++)
-                vertices[j].color = 'w';
+        if (DFS(vertices, 0, 0) != n
+                        || DFS(transposed_vertices, 0, 0) != n){
+            writer.write("NO");
+            writer.close();
+            return;
         }
+
         writer.write("YES");
 
         writer.close();
