@@ -3,11 +3,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-public class C {
+public class solPrior {
     public static final String DISCONNECTED_GRAPH = "Oops! I did it again";
 
     public static void main(String[] args) throws IOException {
@@ -15,9 +14,8 @@ public class C {
         String[] all_edges_string_array = reader.readLine().split(" ");
         final int n = Integer.parseInt(all_edges_string_array[0]);
         final int m = Integer.parseInt(all_edges_string_array[1]);
-        //final PriorityQueue<Edge> priorityQueue = new PriorityQueue<Edge>(n, new EdgeComparator());
-        final Edge[] edges = new Edge[m];
-        int v1, v2, w, temp;
+        final PriorityQueue<Edge> priorityQueue = new PriorityQueue<Edge>(n, new EdgeComparator());
+        int v1, v2, w;
         Vertex[] vertices = new Vertex[n];
 
         for (int i = 0; i < n; i++)
@@ -29,40 +27,17 @@ public class C {
             v2 = Integer.parseInt(all_edges_string_array[1]) - 1;
             w = Integer.parseInt(all_edges_string_array[2]);
 
-            //if (v1 != v2) priorityQueue.offer(new Edge(v1, v2, w));
-            if (v1 != v2) {
-                if (v1 > v2){
-                    temp = v1;
-                    v1 = v2;
-                    v2 = temp;
-                }
-
-                edges[i] = new Edge(v1, v2, w);
-            }
+            if (v1 != v2) priorityQueue.offer(new Edge(v1, v2, w));
         }
-
-        Arrays.sort(edges, new EdgeVertexNumComparator());
-
-        for (int i = 1; i < edges.length; i++) {
-            if (edges[i] == null) break;
-            if (edges[i].v1 == edges[i-1].v1
-                    && edges[i].v2 == edges[i-1].v2){
-                edges[i].w = -1;
-            }
-        }
-
-        Arrays.sort(edges, new EdgeWeightComparator());
 
         int num_of_visited_vertices = 0, sum = 0;
-        //int queue_size = priorityQueue.size();
+        int queue_size = priorityQueue.size();
         Edge curr_edge;
 
-        for (int i = 0; i < edges.length; i++) {
-            if (edges[i] == null || edges[i].w == -1) break;
+        for (int i = 0; i < queue_size; i++) {
+            curr_edge = priorityQueue.poll();
 
-            curr_edge = edges[i];
-
-            //if (vertices[curr_edge.v1].adj.contains(curr_edge.v2)) continue;
+            if (vertices[curr_edge.v1].adj.contains(curr_edge.v2)) continue;
 
             vertices[curr_edge.v2].color = 'b';
 
@@ -99,9 +74,7 @@ public class C {
     }
 }
 
-class Edge */
-/*implements Comparable<Edge>*//*
-{
+class Edge{
     public int v1;
     public int v2;
     public int w;
@@ -111,42 +84,10 @@ class Edge */
         this.v2 = v2;
         this.w = w;
     }
-
-    */
-/*public int compareTo(Edge b){
-        if (this.w < b.w) return 1;
-        else if (this.w > b.w) return -1;
-        else return 0;
-    }*//*
-
 }
 
-class EdgeVertexNumComparator implements Comparator<Edge>{
+class EdgeComparator implements Comparator<Edge>{
     public int compare(Edge a, Edge b){
-        if (a == null && b != null) return 1;
-        else if (a != null && b == null) return -1;
-        else if (a == null && b == null) return 0;
-
-        if (a.v1 < b.v1) return 1;
-        else if (a.v1 > b.v1) return -1;
-        else {
-            if (a.v2 < b.v2) return 1;
-            else if (a.v2 > b.v2) return -1;
-            else {
-                if (a.w < b.w) return 1;
-                else if (a.w > b.w) return -1;
-                else return 0;
-            }
-        }
-    }
-}
-
-class EdgeWeightComparator implements Comparator<Edge>{
-    public int compare(Edge a, Edge b){
-        if (a == null && b != null) return 1;
-        else if (a != null && b == null) return -1;
-        else if (a == null && b == null) return 0;
-
         if (a.w < b.w) return 1;
         else if (a.w > b.w) return -1;
         else return 0;
