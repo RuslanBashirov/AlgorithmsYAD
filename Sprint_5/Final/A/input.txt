@@ -1,0 +1,6 @@
+1000007
+4
+post https://yandex.com/images/programming/image_id_sbcjsdbjb7486584ehjvbdf
+post https://yandex.com/images/cats/image_id_sbcjsdbjb7486584ehjddfv7f7
+get https://prakti.kum/4C99
+get https://prakti.kum/4C100

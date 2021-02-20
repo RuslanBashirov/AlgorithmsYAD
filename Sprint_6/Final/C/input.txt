@@ -1,0 +1,5 @@
+3
+abacabaca
+2[abac]a
+3[aba]
+
